@@ -969,3 +969,91 @@ This file tracks each generation attempt.
 - frontend/src/pages/AdminOrdersPage.tsx
 
 ---
+
+## Attempt 3 — 2026-06-14 [IN PROGRESS]
+
+**Business:** Way Down South
+**Planned Files (81):**
+- backend/src/main/java/com/waydownsouth/model/User.java
+- backend/src/main/java/com/waydownsouth/model/Role.java
+- backend/src/main/java/com/waydownsouth/repository/UserRepository.java
+- backend/src/main/java/com/waydownsouth/exception/GlobalExceptionHandler.java
+- backend/src/main/java/com/waydownsouth/dto/ErrorResponse.java
+- backend/src/main/java/com/waydownsouth/controller/AuthController.java
+- backend/src/main/java/com/waydownsouth/dto/AuthRequest.java
+- backend/src/main/java/com/waydownsouth/dto/AuthResponse.java
+- backend/src/main/java/com/waydownsouth/service/UserService.java
+- backend/src/main/java/com/waydownsouth/util/JwtUtil.java
+- backend/src/main/java/com/waydownsouth/security/JwtAuthFilter.java
+- backend/src/main/java/com/waydownsouth/config/SecurityConfig.java
+- backend/src/main/java/com/waydownsouth/config/AdminInitializer.java
+- backend/src/main/java/com/waydownsouth/model/MenuItem.java
+- backend/src/main/java/com/waydownsouth/model/MenuItemCategory.java
+- backend/src/main/java/com/waydownsouth/repository/MenuItemRepository.java
+- backend/src/main/java/com/waydownsouth/repository/MenuItemCategoryRepository.java
+- backend/src/main/java/com/waydownsouth/dto/MenuItemDto.java
+- backend/src/main/java/com/waydownsouth/service/MenuService.java
+- backend/src/main/java/com/waydownsouth/controller/MenuController.java
+- backend/src/main/java/com/waydownsouth/controller/AdminMenuController.java
+- backend/src/main/java/com/waydownsouth/model/Reservation.java
+- backend/src/main/java/com/waydownsouth/model/ReservationStatus.java
+- backend/src/main/java/com/waydownsouth/repository/ReservationRepository.java
+- backend/src/main/java/com/waydownsouth/dto/CreateReservationRequest.java
+- backend/src/main/java/com/waydownsouth/dto/ReservationResponse.java
+- backend/src/main/java/com/waydownsouth/dto/UpdateReservationStatusRequest.java
+- backend/src/main/java/com/waydownsouth/service/ReservationService.java
+- backend/src/main/java/com/waydownsouth/controller/ReservationController.java
+- backend/src/main/java/com/waydownsouth/controller/AdminReservationController.java
+- backend/src/main/java/com/waydownsouth/model/Order.java
+- backend/src/main/java/com/waydownsouth/model/OrderItem.java
+- backend/src/main/java/com/waydownsouth/model/OrderStatus.java
+- backend/src/main/java/com/waydownsouth/repository/OrderRepository.java
+- backend/src/main/java/com/waydownsouth/repository/OrderItemRepository.java
+- backend/src/main/java/com/waydownsouth/service/OrderService.java
+- backend/src/main/java/com/waydownsouth/dto/CreateOrderRequest.java
+- backend/src/main/java/com/waydownsouth/dto/OrderItemRequest.java
+- backend/src/main/java/com/waydownsouth/dto/OrderResponse.java
+- backend/src/main/java/com/waydownsouth/controller/OrderController.java
+- backend/src/main/java/com/waydownsouth/controller/AdminOrderController.java
+- backend/src/main/java/com/waydownsouth/service/PaymentService.java
+- backend/src/main/java/com/waydownsouth/controller/PaymentController.java
+- backend/src/main/java/com/waydownsouth/dto/RazorpayOrderResponse.java
+- backend/src/main/java/com/waydownsouth/dto/PaymentVerificationRequest.java
+- frontend/src/api/client.ts
+- frontend/src/App.tsx
+- frontend/src/components/Layout.tsx
+- frontend/src/components/Header.tsx
+- frontend/src/components/Footer.tsx
+- frontend/src/pages/HomePage.tsx
+- frontend/src/pages/ContactPage.tsx
+- frontend/src/pages/AdminDashboardPage.tsx
+- frontend/src/types/auth.ts
+- frontend/src/context/AuthContext.tsx
+- frontend/src/services/authService.ts
+- frontend/src/hooks/useAuth.ts
+- frontend/src/components/ProtectedRoute.tsx
+- frontend/src/pages/LoginPage.tsx
+- frontend/src/types/menu.ts
+- frontend/src/services/menuService.ts
+- frontend/src/hooks/useMenu.ts
+- frontend/src/pages/MenuPage.tsx
+- frontend/src/components/MenuItemCard.tsx
+- frontend/src/types/reservation.ts
+- frontend/src/services/reservationService.ts
+- frontend/src/hooks/useReservations.ts
+- frontend/src/pages/ReservationPage.tsx
+- frontend/src/components/ReservationForm.tsx
+- frontend/src/types/order.ts
+- frontend/src/context/CartContext.tsx
+- frontend/src/services/orderService.ts
+- frontend/src/hooks/useOrders.ts
+- frontend/src/pages/OrderPage.tsx
+- frontend/src/components/CheckoutForm.tsx
+- frontend/src/services/adminMenuService.ts
+- frontend/src/pages/AdminMenuPage.tsx
+- frontend/src/services/adminReservationService.ts
+- frontend/src/pages/AdminReservationsPage.tsx
+- frontend/src/services/adminOrderService.ts
+- frontend/src/pages/AdminOrdersPage.tsx
+
+---
