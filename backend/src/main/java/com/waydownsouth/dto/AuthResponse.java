@@ -1,3 +1,5 @@
+package com.waydownsouth.dto;
+
 public class AuthResponse {
     private String token;
     private String role;
