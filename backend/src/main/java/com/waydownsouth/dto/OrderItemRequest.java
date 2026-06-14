@@ -1,4 +1,4 @@
-package com.backend.order.dto;
+package com.waydownsouth.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
