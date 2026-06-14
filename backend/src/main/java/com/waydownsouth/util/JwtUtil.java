@@ -1,4 +1,4 @@
-package com.waydownsouth.security.jwt;
+package com.waydownsouth.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,7 +26,6 @@ public class JwtUtil {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // Extract the user's role and add it to the claims map
         userDetails.getAuthorities().stream().findFirst().ifPresent(authority ->
                 claims.put("role", authority.getAuthority())
         );
