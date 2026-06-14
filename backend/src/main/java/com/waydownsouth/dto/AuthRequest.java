@@ -1,4 +1,4 @@
-package com.waydownsouth.auth.dto;
+package com.waydownsouth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
