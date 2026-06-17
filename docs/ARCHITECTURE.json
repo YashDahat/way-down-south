@@ -409,7 +409,7 @@
     "layer" : "MODEL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Represents a category for menu items (e.g., 'Dosa', 'Idli').",
     "public_functions" : [ ],
     "public_variables" : [ {
