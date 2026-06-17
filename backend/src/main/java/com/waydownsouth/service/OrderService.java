@@ -57,7 +57,7 @@ public class OrderService {
         order.setDeliveryAddress(request.getDeliveryAddress());
         order.setTotalAmount(totalAmount);
         order.setRazorpayOrderId(razorpayOrderId);
-        order.setStatus(OrderStatus.PENDING);
+        order.setStatus(OrderStatus.PENDING_PAYMENT); // Fix: Changed PENDING to PENDING_PAYMENT
         order.setOrderTimestamp(LocalDateTime.now());
 
         orderRepository.save(order);
@@ -84,7 +84,7 @@ public class OrderService {
         Order order = orderRepository.findByRazorpayOrderId(request.getRazorpayOrderId())
                 .orElseThrow(() -> new RuntimeException("Order not found for razorpayOrderId: " + request.getRazorpayOrderId()));
 
-        order.setStatus(OrderStatus.CONFIRMED);
+        order.setStatus(OrderStatus.RECEIVED); // Fix: Changed CONFIRMED to RECEIVED
         order.setRazorpayPaymentId(request.getRazorpayPaymentId());
         orderRepository.save(order);
 

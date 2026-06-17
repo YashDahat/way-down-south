@@ -13,7 +13,7 @@
     "layer" : "MODEL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Represents a user entity for authentication and authorization.",
     "public_functions" : [ ],
     "public_variables" : [ {
@@ -71,7 +71,7 @@
     "layer" : "REPOSITORY",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Spring Data JPA repository for User entities.",
     "public_functions" : [ {
       "name" : "findByEmail",
@@ -93,7 +93,7 @@
     "layer" : "EXCEPTION",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Centralized exception handler for the application.",
     "public_functions" : [ {
       "name" : "handleResourceNotFoundException",
@@ -162,7 +162,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Handles user authentication.",
     "public_functions" : [ {
       "name" : "login",
@@ -266,7 +266,7 @@
     "layer" : "UTIL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Utility class for handling JWT operations.",
     "public_functions" : [ {
       "name" : "generateToken",
@@ -438,7 +438,7 @@
     "layer" : "REPOSITORY",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "JPA repository for MenuItem entities.",
     "public_functions" : [ {
       "name" : "findByCategoryName",
@@ -569,7 +569,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Public-facing REST controller for accessing menu data.",
     "public_functions" : [ {
       "name" : "getMenuItems",
@@ -608,7 +608,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Admin-only REST controller for managing the menu.",
     "public_functions" : [ {
       "name" : "createMenuItem",
@@ -707,7 +707,7 @@
     "layer" : "MODEL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Enumeration for the status of a reservation.",
     "public_functions" : [ ],
     "public_variables" : [ {
@@ -893,7 +893,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Public-facing REST controller for creating reservations.",
     "public_functions" : [ {
       "name" : "createReservation",
@@ -921,7 +921,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Admin-only REST controller for managing reservations.",
     "public_functions" : [ {
       "name" : "getAllReservations",
@@ -960,7 +960,7 @@
     "layer" : "MODEL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Represents a customer's food order.",
     "public_functions" : [ ],
     "public_variables" : [ {
@@ -1058,7 +1058,7 @@
     "layer" : "MODEL",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Enumeration for the status of an order.",
     "public_functions" : [ ],
     "public_variables" : [ {
@@ -1138,7 +1138,7 @@
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service layer for order-related business logic.",
     "public_functions" : [ {
       "name" : "initiateOrder",
@@ -1266,7 +1266,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Public-facing REST controller for creating orders.",
     "public_functions" : [ {
       "name" : "createOrder",
@@ -1333,7 +1333,7 @@
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for interacting with the Razorpay API.",
     "public_functions" : [ {
       "name" : "createRazorpayOrder",
@@ -1360,7 +1360,7 @@
     "layer" : "CONTROLLER",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATION_FAILED",
+    "status" : "VALIDATED",
     "description" : "Handles webhooks from Razorpay.",
     "public_functions" : [ {
       "name" : "handleRazorpayWebhook",
@@ -1449,8 +1449,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "GENERATION_FAILED",
     "description" : "Configures and exports a singleton Axios instance for all API calls.",
     "public_functions" : [ ],
     "public_variables" : [ {
@@ -1667,8 +1667,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for making authentication-related API calls.",
     "public_functions" : [ {
       "name" : "login",
@@ -1782,8 +1782,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "VALIDATED",
     "description" : "Service for fetching menu data from the API.",
     "public_functions" : [ {
       "name" : "getMenuItems",
@@ -1917,8 +1917,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for making reservation-related API calls.",
     "public_functions" : [ {
       "name" : "createReservation",
@@ -2037,7 +2037,7 @@
     "layer" : "CONTEXT",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATED",
+    "status" : "GENERATION_FAILED",
     "description" : "React context for managing the user's shopping cart.",
     "public_functions" : [ {
       "name" : "CartProvider",
@@ -2058,8 +2058,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for making order-related API calls.",
     "public_functions" : [ {
       "name" : "createOrder",
@@ -2152,8 +2152,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for admin-only menu management API calls.",
     "public_functions" : [ {
       "name" : "createMenuItem",
@@ -2224,8 +2224,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for admin-only reservation management API calls.",
     "public_functions" : [ {
       "name" : "getReservations",
@@ -2285,8 +2285,8 @@
     "file_type" : "FRONTEND",
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
-    "updated_date" : "2024-07-29",
-    "status" : "PLANNED",
+    "updated_date" : "2026-06-17",
+    "status" : "GENERATED",
     "description" : "Service for admin-only order management API calls.",
     "public_functions" : [ {
       "name" : "getOrders",

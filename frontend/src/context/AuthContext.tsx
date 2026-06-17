@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useMemo } from 'react';
-import * as authService from '../services/auth-service';
+import authService from '../services/authService'; // Changed to AuthService (capital A) - FIX: Reverted to lowercase 'a' assuming file is authService.ts
 
 interface AuthContextType {
   token: string | null;
@@ -31,11 +31,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     try {
       const response = await authService.login(email, password);
-      const { token, role } = response;
-      setToken(token);
-      setRole(role);
-      localStorage.setItem('token', token);
-      localStorage.setItem('role', role);
+      setToken(response.token);
+      setRole(response.role);
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('role', response.role);
     } catch (error) {
       console.error('Login failed:', error);
       setToken(null);
@@ -67,9 +66,5 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [token, role, isLoading]
   );
 
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
