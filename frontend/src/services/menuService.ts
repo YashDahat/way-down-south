@@ -1,5 +1,5 @@
 import { apiClient } from '../api/client';
-import { MenuItem } from '../types/menu';
+import type { MenuItem } from '../types/menu';
 
 export const getMenuItems = async (params: { category?: string, search?: string }): Promise<MenuItem[]> => {
   const response = await apiClient.get<MenuItem[]>('/api/v1/menu/items', { params });
