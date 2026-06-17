@@ -45,6 +45,11 @@ public class AdminOrderController {
         try {
             newStatusEnum = OrderStatus.valueOf(statusString.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
+            // The previous code had an unreachable statement because it attempted to return
+            // and then throw an exception in the same catch block.
+            // As per the internal comment's final decision, throwing IllegalArgumentException
+            // is the intended mechanism for a 400 Bad Request, relying on Spring's default
+            // error handling or a GlobalExceptionHandler.
             throw new IllegalArgumentException("Invalid status value: " + statusString, e);
         }
 
