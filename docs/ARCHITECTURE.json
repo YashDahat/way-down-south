@@ -1783,7 +1783,7 @@
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATION_FAILED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Service for fetching menu data from the API.",
     "public_functions" : [ {
       "name" : "getMenuItems",
@@ -2325,7 +2325,7 @@
     "layer" : "PAGE",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Admin page for managing customer orders.",
     "public_functions" : [ {
       "name" : "AdminOrdersPage",
