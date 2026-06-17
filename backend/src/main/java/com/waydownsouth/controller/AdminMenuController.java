@@ -1,7 +1,7 @@
-package com.waydownsouth.menu.controller;
+package com.waydownsouth.controller;
 
-import com.waydownsouth.menu.dto.MenuItemDto;
-import com.waydownsouth.menu.service.MenuService;
+import com.waydownsouth.dto.MenuItemDto;
+import com.waydownsouth.service.MenuService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,9 @@ public class AdminMenuController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MenuItemDto> updateMenuItem(@PathVariable UUID id, @Valid @RequestBody MenuItemDto menuItemDto) {
+    public ResponseEntity<MenuItemDto> updateMenuItem(
+            @PathVariable UUID id,
+            @Valid @RequestBody MenuItemDto menuItemDto) {
         MenuItemDto updatedItem = menuService.updateMenuItem(id, menuItemDto);
         return ResponseEntity.ok(updatedItem);
     }

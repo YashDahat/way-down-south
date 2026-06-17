@@ -37,14 +37,23 @@ const formSchema = z.object({
   customerName: z.string().min(1, "Customer name is required."),
   email: z.string().email("Invalid email address.").min(1, "Email is required."),
   phone: z.string().min(1, "Phone number is required."),
-  date: z.date({
-    required_error: "A reservation date is required.",
-  }).min(new Date(new Date().setHours(0, 0, 0, 0)), "Reservation date must be today or in the future."),
+  date: z.date()
+    .min(new Date(new Date().setHours(0, 0, 0, 0)), "Reservation date must be today or in the future."), // Fix 1: Removed .optional() and redundant refine, making date required
   time: z.string().min(1, "Reservation time is required."),
-  partySize: z.coerce.number().min(1, "Party size must be at least 1.").max(12, "Party size cannot exceed 12."),
+  partySize: z.string() // Keep partySize as string for both input and output of the schema
+    .min(1, "Party size is required.")
+    .refine((val) => { // Add refine for numeric validation
+      const num = Number(val);
+      return !isNaN(num) && num >= 1 && num <= 12;
+    }, "Party size must be between 1 and 12."),
 });
 
-type ReservationFormValues = z.infer<typeof formSchema>;
+// Define input and output types for the form based on the Zod schema
+// ReservationFormInput represents the raw values from the form fields (before transformation)
+type ReservationFormInput = z.input<typeof formSchema>;
+// ReservationFormOutput represents the validated and transformed values (after transformation)
+// With the change above, partySize will now be string in ReservationFormOutput as well.
+type ReservationFormOutput = z.infer<typeof formSchema>;
 
 const generateTimeSlots = () => {
   const slots = [];
@@ -62,22 +71,25 @@ const timeSlots = generateTimeSlots();
 const partySizeOptions = Array.from({ length: 12 }, (_, i) => i + 1);
 
 const ReservationForm: React.FC = () => {
-  const { mutate, isPending, isSuccess, isError, error, data } = useCreateReservation();
+  const { mutate, isPending, isSuccess, isError, data } = useCreateReservation();
 
-  const form = useForm<ReservationFormValues>({
+  // Use ReservationFormInput for the form's field values and ReservationFormOutput for transformed values
+  const form = useForm<ReservationFormInput, any, ReservationFormOutput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       customerName: "",
       email: "",
       phone: "",
-      date: undefined,
+      date: new Date(), // Fix 2: Initialize required date field to a Date object
       time: "",
-      partySize: 1,
+      partySize: "1", // Fix 3: Initialize partySize as string to match ReservationFormInput type
     },
   });
 
-  const onSubmit = (values: ReservationFormValues) => {
-    const datePart = format(values.date, 'yyyy-MM-dd');
+  // onSubmit receives values of type ReservationFormOutput (partySize is string here after schema change)
+  const onSubmit = (values: ReservationFormOutput) => {
+    // values.date is guaranteed to be a Date object here due to schema validation
+    const datePart = format(values.date as Date, 'yyyy-MM-dd');
     const reservationTime = `${datePart}T${values.time}:00`;
 
     mutate({
@@ -85,7 +97,7 @@ const ReservationForm: React.FC = () => {
       email: values.email,
       phone: values.phone,
       reservationTime: reservationTime,
-      partySize: values.partySize,
+      partySize: Number(values.partySize), // Convert partySize to number here for the API call
     });
   };
 
@@ -179,7 +191,6 @@ const ReservationForm: React.FC = () => {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                      initialFocus
                     />
                   </PopoverContent>
                 </Popover>
@@ -220,7 +231,8 @@ const ReservationForm: React.FC = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Party Size</FormLabel>
-              <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={String(field.value)}>
+              {/* field.onChange expects a string for partySize as per ReservationFormInput */}
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select party size" />

@@ -1,7 +1,7 @@
-package com.waydownsouth.menu.service;
+package com.waydownsouth.service;
 
+import com.waydownsouth.dto.MenuItemDto;
 import com.waydownsouth.exception.ResourceNotFoundException;
-import com.waydownsouth.menu.dto.MenuItemDto;
 import com.waydownsouth.model.MenuItem;
 import com.waydownsouth.model.MenuItemCategory;
 import com.waydownsouth.repository.MenuItemCategoryRepository;

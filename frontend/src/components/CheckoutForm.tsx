@@ -2,21 +2,22 @@ import { useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
-import { useNavigate } from 'react-router-dom';
 
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 import { useCreateOrder } from '../hooks/useOrders';
 import { CartContext } from '../context/CartContext';
 import { CreateOrderRequest, RazorpayOrderResponse } from '../types/order';
 
+// Declare global window.Razorpay for TypeScript
 declare global {
   interface Window {
-    Razorpay: new (options: any) => any;
+    Razorpay: any;
   }
 }
 
@@ -29,15 +30,17 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const CheckoutForm = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const cartContext = useContext(CartContext);
 
   if (!cartContext) {
-    throw new Error('CheckoutForm must be used within a CartProvider');
+    // This case should ideally be prevented by ensuring CartProvider wraps the component tree
+    console.error('CartContext is not available. Ensure CheckoutForm is rendered within CartProvider.');
+    return null;
   }
 
   const { cartItems, clearCart } = cartContext;
-  const { mutate, isPending, error } = useCreateOrder();
+  const { mutate, isPending, isError, error } = useCreateOrder();
 
   const {
     register,
@@ -48,6 +51,7 @@ const CheckoutForm = () => {
     resolver: zodResolver(formSchema),
   });
 
+  // Dynamically load Razorpay checkout script
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -69,16 +73,17 @@ const CheckoutForm = () => {
       name: 'Way Down South',
       description: 'Order Payment',
       order_id: data.razorpayOrderId,
-      handler: function (_response: any) {
+      handler: function (_response: any) { // Renamed 'response' to '_response' to mark as unused
+        // On successful payment
         clearCart();
-        navigate('/order-confirmation');
+        router.push('/order-confirmation');
       },
       prefill: {
         name: customerName,
         contact: customerPhone,
       },
       theme: {
-        color: '#d4a843',
+        color: '#d4a843', // Turmeric Yellow
       },
     };
 
@@ -87,13 +92,13 @@ const CheckoutForm = () => {
       rzp.open();
     } else {
       console.error('Razorpay SDK not loaded.');
-      alert('Payment gateway not available. Please try again later.');
+      alert('Razorpay payment gateway is not available. Please try again later.');
     }
   };
 
   const handleError = (err: Error) => {
     console.error('Order creation failed:', err);
-    alert(`Order failed: ${err.message}`);
+    alert(`Failed to place order: ${err.message || 'Unknown error'}`);
   };
 
   const onSubmit = (formData: FormData) => {
@@ -102,7 +107,7 @@ const CheckoutForm = () => {
       return;
     }
 
-    const orderItems = cartItems.map(item => ({
+    const orderItems = cartItems.map((item) => ({
       menuItemId: item.id,
       quantity: item.quantity,
       price: item.price,
@@ -159,13 +164,13 @@ const CheckoutForm = () => {
         )}
       </div>
 
-      {error && (
-        <p className="text-red-500 text-sm mt-2">Error: {error.message}</p>
+      {isError && (
+        <p className="text-red-500 text-sm mt-1">Error: {error?.message || 'Failed to place order.'}</p>
       )}
 
       <Button
         type="submit"
-        className="w-full bg-[#d4a843] hover:bg-[#c0973e] text-white"
+        className="w-full bg-[#d4a843] hover:bg-[#c0973b] text-white"
         disabled={isPending || cartItems.length === 0}
       >
         {isPending ? 'Processing...' : 'Place Order & Pay'}

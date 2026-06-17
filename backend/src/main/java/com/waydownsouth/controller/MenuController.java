@@ -1,7 +1,7 @@
-package com.waydownsouth.menu.controller;
+package com.waydownsouth.controller;
 
-import com.waydownsouth.menu.dto.MenuItemDto;
-import com.waydownsouth.menu.service.MenuService;
+import com.waydownsouth.dto.MenuItemDto;
+import com.waydownsouth.service.MenuService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +21,9 @@ public class MenuController {
     }
 
     @GetMapping("/items")
-    public ResponseEntity<List<MenuItemDto>> getMenuItems(@RequestParam(required = false) String category, @RequestParam(required = false) String search) {
+    public ResponseEntity<List<MenuItemDto>> getMenuItems(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String search) {
         List<MenuItemDto> menuItems = menuService.getAllMenuItems(category, search);
         return ResponseEntity.ok(menuItems);
     }
