@@ -1,63 +1,65 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-const Header: React.FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
-
-  const navLinkClasses = (isActive: boolean) =>
+  const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
     clsx(
       'text-white hover:text-[#d4a843] transition-colors duration-200',
-      isActive && 'underline text-[#d4a43]'
+      isActive && 'text-[#d4a843] underline'
+    );
+
+  const mobileNavLinkClasses = ({ isActive }: { isActive: boolean }) =>
+    clsx(
+      'block px-4 py-2 text-white hover:bg-gray-700 w-full text-center',
+      isActive && 'bg-gray-700 text-[#d4a843]'
     );
 
   return (
     <header className="bg-[#1c1c1e] py-4">
       <div className="container mx-auto flex justify-between items-center px-4">
         {/* Branding */}
-        <Link to="/" className="text-[#d4a843] font-bold text-2xl" onClick={closeMobileMenu}>
+        <Link to="/" className="text-[#d4a843] font-bold text-3xl tracking-wide">
           Way Down South
         </Link>
 
-        {/* Desktop Navigation & CTA */}
-        <div className="hidden md:flex items-center space-x-6">
-          <nav className="flex space-x-6">
-            <NavLink to="/" className={({ isActive }) => navLinkClasses(isActive)}>
-              Home
-            </NavLink>
-            <NavLink to="/menu" className={({ isActive }) => navLinkClasses(isActive)}>
-              Menu
-            </NavLink>
-            <NavLink to="/reservations" className={({ isActive }) => navLinkClasses(isActive)}>
-              Reservations
-            </NavLink>
-          </nav>
-          <Link
-            to="/order"
-            className="bg-[#c0392b] text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200"
-          >
-            Order Now
-          </Link>
-        </div>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex space-x-8 items-center">
+          <NavLink to="/" className={navLinkClasses}>
+            Home
+          </NavLink>
+          <NavLink to="/menu" className={navLinkClasses}>
+            Menu
+          </NavLink>
+          <NavLink to="/reservations" className={navLinkClasses}>
+            Reservations
+          </NavLink>
+        </nav>
 
-        {/* Mobile Menu Button */}
-        <button className="md:hidden text-white focus:outline-none" onClick={toggleMobileMenu}>
+        {/* Call to Action - Desktop */}
+        <Link
+          to="/order"
+          className="hidden md:block bg-[#c0392b] text-white px-6 py-2 rounded-md font-semibold hover:bg-red-700 transition-colors duration-200"
+        >
+          Order Now
+        </Link>
+
+        {/* Mobile Hamburger Icon */}
+        <button
+          className="md:hidden text-white focus:outline-none"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle mobile menu"
+        >
           <svg
-            className="w-6 h-6"
+            className="w-8 h-8"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {isMobileMenuOpen ? (
+            {mobileMenuOpen ? (
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -76,34 +78,22 @@ const Header: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-[#1c1c1e] p-4 flex flex-col space-y-4 z-50">
-          <NavLink
-            to="/"
-            className={({ isActive }) => clsx(navLinkClasses(isActive), 'block')}
-            onClick={closeMobileMenu}
-          >
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1e] flex flex-col items-center py-4 space-y-4 z-50">
+          <NavLink to="/" className={mobileNavLinkClasses} onClick={() => setMobileMenuOpen(false)}>
             Home
           </NavLink>
-          <NavLink
-            to="/menu"
-            className={({ isActive }) => clsx(navLinkClasses(isActive), 'block')}
-            onClick={closeMobileMenu}
-          >
+          <NavLink to="/menu" className={mobileNavLinkClasses} onClick={() => setMobileMenuOpen(false)}>
             Menu
           </NavLink>
-          <NavLink
-            to="/reservations"
-            className={({ isActive }) => clsx(navLinkClasses(isActive), 'block')}
-            onClick={closeMobileMenu}
-          >
+          <NavLink to="/reservations" className={mobileNavLinkClasses} onClick={() => setMobileMenuOpen(false)}>
             Reservations
           </NavLink>
           <Link
             to="/order"
-            className="bg-[#c0392b] text-white px-4 py-2 rounded-md text-center hover:bg-red-700 transition-colors duration-200"
-            onClick={closeMobileMenu}
+            className="bg-[#c0392b] text-white px-6 py-2 rounded-md font-semibold hover:bg-red-700 transition-colors duration-200 w-3/4 text-center"
+            onClick={() => setMobileMenuOpen(false)}
           >
             Order Now
           </Link>
@@ -111,6 +101,4 @@ const Header: React.FC = () => {
       )}
     </header>
   );
-};
-
-export default Header;
+}

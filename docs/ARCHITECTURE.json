@@ -342,7 +342,7 @@
     "layer" : "CONFIG",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "GENERATION_FAILED",
     "description" : "Initializes the default admin user on application startup if one doesn't exist.",
     "public_functions" : [ {
       "name" : "run",
@@ -1493,7 +1493,7 @@
     "layer" : "COMPONENT",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATION_FAILED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Main layout component including Header, Footer, and main content area.",
     "public_functions" : [ {
       "name" : "Layout",
@@ -1515,7 +1515,7 @@
     "layer" : "COMPONENT",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATION_FAILED",
+    "status" : "SPEC_COMPLIANT",
     "description" : "Application header with navigation and branding.",
     "public_functions" : [ {
       "name" : "Header",
@@ -1783,7 +1783,7 @@
     "layer" : "SERVICE",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "VALIDATED",
+    "status" : "GENERATION_FAILED",
     "description" : "Service for fetching menu data from the API.",
     "public_functions" : [ {
       "name" : "getMenuItems",
@@ -1990,7 +1990,7 @@
     "layer" : "COMPONENT",
     "created_date" : "2024-07-29",
     "updated_date" : "2026-06-17",
-    "status" : "GENERATION_FAILED",
+    "status" : "GENERATED",
     "description" : "A form for submitting a table reservation.",
     "public_functions" : [ {
       "name" : "ReservationForm",

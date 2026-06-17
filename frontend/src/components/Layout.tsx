@@ -1,13 +1,13 @@
 import React from 'react';
-import Header from './Header';
-import * as FooterModule from './Footer'; // Fix: Changed to named import due to TS1192 "Module has no default export"
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow">{children}</main>
-      <FooterModule.default /> {/* Fix: Access the default export from the module */}
+      <Footer />
     </div>
   );
 };

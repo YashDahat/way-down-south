@@ -22,8 +22,9 @@ public class AdminInitializer implements CommandLineRunner {
     @Value("${admin.password}")
     private String adminPassword;
 
-    @Value("${admin.name}")
-    private String adminName;
+    // The 'admin.name' property is not used in the User model or in the creation logic.
+    // Removing it to align with the User model which only has email, passwordHash, and role.
+    // private String adminName;
 
     public AdminInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
