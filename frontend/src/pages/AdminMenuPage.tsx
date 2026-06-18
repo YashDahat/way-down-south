@@ -4,29 +4,21 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import { useMenu, useMenuCategories } from '../hooks/useMenu';
+import { useMenu } from '../hooks/useMenu';
 import { createMenuItem, updateMenuItem, deleteMenuItem } from '../services/adminMenuService';
 import type { MenuItem } from '../types/menu';
 
+// Shadcn UI components
 import { Button } from '@/components/ui/button';
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableHead,
-  TableRow,
-  TableCell,
-} from '@/components/ui/table';
-import { // Corrected import path for Dialog components
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
-  DialogFooter,
   DialogTrigger,
+  DialogFooter,
 } from '@/components/ui/dialog';
-import { // Corrected import path for AlertDialog components
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -46,27 +38,28 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Textarea } from '@/components/ui/textarea';
 
+// Zod schema — price stays as a string in the form; we coerce manually on submit.
 const menuItemSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  // FIX 1: Ensure description is always a string for the API by transforming undefined to an empty string.
-  // The MenuItem interface expects 'description: string', not 'string | undefined'.
-  // Changed from .optional().transform() to .default('') to ensure the schema's output type for description is always 'string',
-  // which aligns with MenuItemFormValues and resolves the type mismatch with zodResolver.
-  description: z.string().default(''),
-  // Use z.coerce.number() for price to handle string input from form fields
-  price: z.coerce.number().min(0.01, 'Price must be a positive number'),
-  // Changed 'category' to 'categoryName' to match MenuItem interface
-  categoryName: z.string().min(1, 'Category is required'),
-  imageUrl: z.string().url('Must be a valid URL').min(1, 'Image URL is required'),
+  name: z.string().min(1, { message: 'Name is required' }),
+  description: z.string().optional(),
+  price: z
+    .string()
+    .min(1, { message: 'Price is required' })
+    .refine((val) => !isNaN(Number(val)) && Number(val) >= 0, {
+      message: 'Price must be a non-negative number',
+    }),
+  categoryName: z.string().min(1, { message: 'Category is required' }),
+  imageUrl: z.string().url({ message: 'Must be a valid URL' }).optional().or(z.literal('')),
 });
 
 type MenuItemFormValues = z.infer<typeof menuItemSchema>;
@@ -74,7 +67,6 @@ type MenuItemFormValues = z.infer<typeof menuItemSchema>;
 const AdminMenuPage: React.FC = () => {
   const queryClient = useQueryClient();
   const { data: menuItems, isLoading, error } = useMenu({});
-  const { data: categories, isLoading: isLoadingCategories } = useMenuCategories();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -84,51 +76,48 @@ const AdminMenuPage: React.FC = () => {
     defaultValues: {
       name: '',
       description: '',
-      price: 0,
-      // Changed 'category' to 'categoryName'
+      price: '0',
       categoryName: '',
       imageUrl: '',
     },
   });
 
   useEffect(() => {
-    if (editingItem) {
-      form.reset({
-        name: editingItem.name,
-        description: editingItem.description || '',
-        price: editingItem.price,
-        // Changed 'category' to 'categoryName'
-        categoryName: editingItem.categoryName,
-        imageUrl: editingItem.imageUrl,
-      });
-    } else {
-      form.reset({
-        name: '',
-        description: '',
-        price: 0,
-        // Changed 'category' to 'categoryName'
-        categoryName: '',
-        imageUrl: '',
-      });
+    if (isDialogOpen) {
+      if (editingItem) {
+        form.reset({
+          name: editingItem.name,
+          description: editingItem.description || '',
+          price: String(editingItem.price),
+          categoryName: editingItem.categoryName,
+          imageUrl: editingItem.imageUrl || '',
+        });
+      } else {
+        form.reset({
+          name: '',
+          description: '',
+          price: '0',
+          categoryName: '',
+          imageUrl: '',
+        });
+      }
     }
-  }, [editingItem, form]);
+  }, [isDialogOpen, editingItem, form]);
 
   const createMutation = useMutation({
     mutationFn: createMenuItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       setIsDialogOpen(false);
-      setEditingItem(null);
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: (item: MenuItemFormValues) =>
-      updateMenuItem(editingItem!.id, item),
+    mutationFn: ({ id, item }: { id: string; item: Partial<MenuItem> }) =>
+      updateMenuItem(id, item),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['menuItems'] });
       setIsDialogOpen(false);
-      setEditingItem(null);
     },
   });
 
@@ -139,11 +128,20 @@ const AdminMenuPage: React.FC = () => {
     },
   });
 
+  // Manually coerce price from string → number before calling the service.
   const onSubmit = (values: MenuItemFormValues) => {
+    const itemToSave = {
+      name: values.name,
+      categoryName: values.categoryName,
+      price: Number(values.price),
+      description: values.description || undefined,
+      imageUrl: values.imageUrl || undefined,
+    };
+
     if (editingItem) {
-      updateMutation.mutate(values);
+      updateMutation.mutate({ id: editingItem.id, item: itemToSave });
     } else {
-      createMutation.mutate(values);
+      createMutation.mutate(itemToSave as Omit<MenuItem, 'id'>);
     }
   };
 
@@ -157,20 +155,11 @@ const AdminMenuPage: React.FC = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDeleteConfirm = (id: string) => {
-    deleteMutation.mutate(id);
-  };
-
-  if (isLoading) {
-    return <div className="p-6">Loading menu items...</div>;
-  }
-
-  if (error) {
-    return <div className="p-6 text-red-500">Error loading menu items: {error.message}</div>;
-  }
+  if (isLoading) return <div>Loading menu items...</div>;
+  if (error) return <div>Error loading menu items: {error.message}</div>;
 
   return (
-    <div className="p-6">
+    <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Manage Menu</h1>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -181,10 +170,7 @@ const AdminMenuPage: React.FC = () => {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>{editingItem ? 'Edit Menu Item' : 'Add New Item'}</DialogTitle>
-            <DialogDescription>
-              {editingItem ? 'Edit the details of the menu item.' : 'Add a new item to the menu.'}
-            </DialogDescription>
+            <DialogTitle>{editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}</DialogTitle>
           </DialogHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
@@ -221,9 +207,7 @@ const AdminMenuPage: React.FC = () => {
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
-                      {/* FIX 2: When using z.coerce.number(), the onChange handler should pass the raw string value from the input.
-                         Zod will then handle the coercion from string to number during validation. */}
-                      <Input type="number" step="0.01" {...field} onChange={field.onChange} />
+                      <Input type="number" step="0.01" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -231,29 +215,13 @@ const AdminMenuPage: React.FC = () => {
               />
               <FormField
                 control={form.control}
-                // Changed 'category' to 'categoryName'
                 name="categoryName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {isLoadingCategories ? (
-                          <SelectItem value="loading" disabled>Loading categories...</SelectItem>
-                        ) : (
-                          categories?.map((category) => (
-                            <SelectItem key={category} value={category}>
-                              {category}
-                            </SelectItem>
-                          ))
-                        )}
-                      </SelectContent>
-                    </Select>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -272,7 +240,10 @@ const AdminMenuPage: React.FC = () => {
                 )}
               />
               <DialogFooter>
-                <Button type="submit" disabled={createMutation.isPending || updateMutation.isPending}>
+                <Button
+                  type="submit"
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                >
                   {editingItem ? 'Save Changes' : 'Add Item'}
                 </Button>
               </DialogFooter>
@@ -281,57 +252,69 @@ const AdminMenuPage: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Image</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead className="text-right">Price</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {menuItems?.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <img src={item.imageUrl} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
-              </TableCell>
-              <TableCell className="font-medium">{item.name}</TableCell>
-              {/* Changed 'category' to 'categoryName' */}
-              <TableCell>{item.categoryName}</TableCell>
-              <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
-              <TableCell className="text-center">
-                <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEditClick(item)}>
-                  Edit
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="destructive" size="sm">
-                      Delete
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the menu item{' '}
-                        <span className="font-semibold">{item.name}</span> from the database.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleDeleteConfirm(item.id)}>
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </TableCell>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Image</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="text-right">Price</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {menuItems?.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>
+                  {item.imageUrl && (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded-md"
+                    />
+                  )}
+                </TableCell>
+                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>{item.categoryName}</TableCell>
+                <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
+                <TableCell className="text-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mr-2"
+                    onClick={() => handleEditClick(item)}
+                  >
+                    Edit
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" size="sm">
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete the menu item
+                          &quot;{item.name}&quot; from the database.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => deleteMutation.mutate(item.id)}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
