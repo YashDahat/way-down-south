@@ -2,7 +2,7 @@ import { useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { Input } from '@/components/ui/input';
@@ -30,7 +30,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const CheckoutForm = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const cartContext = useContext(CartContext);
 
   if (!cartContext) {
@@ -76,7 +76,7 @@ const CheckoutForm = () => {
       handler: function (_response: any) { // Renamed 'response' to '_response' to mark as unused
         // On successful payment
         clearCart();
-        router.push('/order-confirmation');
+        navigate('/order-confirmation');
       },
       prefill: {
         name: customerName,
